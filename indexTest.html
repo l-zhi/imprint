@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="x-dns-prefetch-control" content="on" />
+	<link rel="stylesheet" href="dist/css/stamp.css">
+	<script src="dist/js/imprint.js"></script>
+
+	<body>
+		<div class=" mod-upload-pic">
+			<div class="item item-add">
+				<input id="J_encodeImg" class="uploadFile" type="file" name="file" multiple="" accept="image/*">
+			</div>
+			<div class="item">
+				<img id="J_upload" src="" />
+				</em>
+			</div>
+		</div>
+
+		<hr>
+		<div class=" mod-upload-pic">
+			<div class="item item-add">
+				<input id="J_decodeImg" class="uploadFile" type="file" name="file" multiple="" accept="image/*">
+			</div>
+			<div class="item">
+				<img id="J_upload2" src="" />
+				</em>
+			</div>
+		</div>
+		<div id="J_imagesInfo" class="upload_info">
+			<img src="" id="J_test" alt="">
+		</div>
+		<script>
+			function downloadFile(filename, url) {
+				const link = document.createElement('a')
+				link.href = url
+				link.download = filename
+				document.body.appendChild(link)
+				link.dispatchEvent(new window.MouseEvent('click'))
+				document.body.removeChild(link)
+			}
+			var J_encodeImg = document.getElementById('J_encodeImg')
+			var J_decodeImg = document.getElementById('J_decodeImg')
+
+			function encodeImg(file) {
+				var reader = new FileReader();
+				reader.onloadend = function () {
+					var img = new Image()
+					img.onload = function () {
+						var url = window.Imprint.encode(img, 'linglong')
+						document.getElementById('J_upload').src = url
+						downloadFile('test', url)
+					}
+					img.src = reader.result
+				}.bind(this);
+				reader.readAsDataURL(file);
+			}
+			function decodeImg(file) {
+				var reader = new FileReader();
+				reader.onloadend = function () {
+					var img = new Image()
+					img.onload = function () {
+						window.Imprint.decode(img, 'linglong')
+						document.getElementById('J_upload2').src = reader.result
+					}
+					img.src = reader.result
+				}.bind(this);
+				reader.readAsDataURL(file);
+			}
+			J_encodeImg.addEventListener('change', function (e) {
+				var reader = new FileReader();
+				var files = e.target.files || e.dataTransfer.files
+				for (var i = 0; i < files.length; i++) {
+					encodeImg(files[i])
+				}
+			})
+			J_decodeImg.addEventListener('change', function (e) {
+				var reader = new FileReader();
+				var files = e.target.files || e.dataTransfer.files
+				for (var i = 0; i < files.length; i++) {
+					decodeImg(files[i])
+				}
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="x-dns-prefetch-control" content="on" />
+	<link rel="stylesheet" href="dist/css/imprint.css">
+	<script src="dist/js/imprint.js"></script>
+
+	<body>
+		<h1>Encode & Decode *.jpg</h1>
+		<h3>1. Upload the image</h3>
+		<div class=" mod-upload-pic">
+			<div class="item item-add">
+				<input id="J_encodeImg" class="uploadFile" type="file" name="file" multiple="" accept="image/*">
+			</div>
+			<div class="item">
+				<img id="J_upload" src="" />
+				</em>
+			</div>
+		</div>
+		<h3>2. Encode</h3>
+		<input type="text" value="5a0ee1444f37108ea1183c5c" id="J_pass">
+		<a href="javascript:;" class="button " id="J_encode">Encode</a>
+		<h3>3. Download</h3>
+		<a id="J_downloadLnk" class="button" download="encode.jpg">Download as image</a>
+		<hr>
+		<h2>Decode</h2>
+		<h3>1. Upload the image</h3>
+		<div class=" mod-upload-pic">
+			<div class="item item-add">
+				<input id="J_decodeImg" class="uploadFile" type="file" name="file" multiple="" accept="image/*">
+			</div>
+			<div class="item">
+				<img id="J_upload2" src="" />
+				</em>
+			</div>
+		</div>
+		<input type="text" value="5a0ee1444f37108ea1183c5c" id="J_pass2">
+		<a href="javascript:;" class="button" id="J_decode">Decode</a>
+		<div id="J_reslut"></div>
+		<script>
+
+			function downloadFile(filename, url) {
+				const link = document.createElement('a')
+				link.href = url
+				link.download = filename
+				document.body.appendChild(link)
+				link.dispatchEvent(new window.MouseEvent('click'))
+				document.body.removeChild(link)
+			}
+			var downloadURL = 0
+			var encodeImg = 0
+			var decodeImg = 0
+			var J_downloadLnk = document.getElementById('J_downloadLnk')
+			var J_encodeImg = document.getElementById('J_encodeImg')
+			var J_decodeImg = document.getElementById('J_decodeImg')
+			var J_encode = document.getElementById('J_encode')
+			var J_decode = document.getElementById('J_decode')
+
+			J_encodeImg.addEventListener('change', function (e) {
+				downloadURL = 0
+				var reader = new FileReader();
+				var files = e.target.files || e.dataTransfer.files
+				reader.onloadend = function () {
+					var img = new Image()
+					img.onload = function () {
+						document.getElementById('J_upload').src = reader.result
+						encodeImg = img
+					}
+					img.src = reader.result
+				}.bind(this);
+				reader.readAsDataURL(files[0]);
+			})
+			J_decodeImg.addEventListener('change', function (e) {
+				decodeImg = 0
+				var reader = new FileReader();
+				var files = e.target.files || e.dataTransfer.files
+				reader.onloadend = function () {
+					var img = new Image()
+					img.onload = function () {
+						document.getElementById('J_upload2').src = reader.result
+						decodeImg = img
+					}
+					img.src = reader.result
+				}.bind(this);
+				reader.readAsDataURL(files[0]);
+			})
+			J_encode.addEventListener('click', function () {
+				var pass = document.getElementById('J_pass').value
+				if (pass < 6) {
+					alert('password less then 6')
+					return
+				}
+				if (!encodeImg) {
+					alert('Upload the picture first')
+					return
+				}
+				downloadURL = window.Imprint.encode(encodeImg, pass)
+				J_encode.innerText = 'Encoding...'
+				setTimeout(() => {
+					J_encode.innerText = 'Encode'
+				}, 1000);
+			})
+			J_decode.addEventListener('click', function () {
+				if (!decodeImg) {
+					alert('Upload the picture first')
+					return
+				}
+				var pass = document.getElementById('J_pass2').value
+				if (pass < 6) {
+					alert('password less then 6')
+					return
+				}
+				console.info('pass', pass)
+				var rs = window.Imprint.decode(decodeImg, pass)
+				if (rs) {
+					document.getElementById('J_reslut').innerText = 'Yes'
+				} else {
+					document.getElementById('J_reslut').innerText = 'No'
+				}
+			})
+			J_downloadLnk.addEventListener('click', function () {
+				if (downloadURL) {
+					downloadFile('test', downloadURL)
+				} else {
+					alert('upload and encode the picture')
+				}
+			})
+		</script>
+	</body>
+
+</html>
