@@ -22,10 +22,6 @@ window.Imprint.encode(img, 'password')
 window.Imprint.decode(img, 'password')
 ```
 
-#### Example
-
-![Demo](https://raw.githubusercontent.com/l-zhi/LZFile/gh-pages/code.png)
-
 ## License
 
 All code licensed under the
