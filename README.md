@@ -10,14 +10,14 @@ HTML code ：
 
 ```javascript
 /**
- * @param {Image Dom} img 图片DOM
- * @param {String} pass 密码字符串
+ * @param {Image Dom} img Image DOM
+ * @param {String} pass password string
  */
 window.Imprint.encode(img, 'password')
 
 /**
- * @param {Image Dom} img 图片DOM
- * @param {String} pass 解密字符串
+ * @param {Image Dom} img Image DOM
+ * @param {String} pass password string
  */
 window.Imprint.decode(img, 'password')
 ```
