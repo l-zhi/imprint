@@ -1,6 +1,6 @@
 # Imprint
 
-Images encode and decode with password. \*.JPG only support.
+Images encode and decode with password. steganography \*.JPG only support.
 
 ```html
 <script src="dist/js/imprint.js"></script>
